@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>HLR Lookup</h1>
+<form method="post" class="mb-3">
+    {% csrf_token %}
+    <label>Enter phone numbers (space or newline separated):</label><br />
+    <textarea name="msisdn" rows="10" cols="50" placeholder="Enter phone numbers, one per line" required></textarea><br /><br />
+    <button class="btn btn-primary" type="submit">Check</button>
+</form>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if result %}
+  <h3>Results:</h3>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>MSISDN</th><th>Country</th><th>Status</th><th>Error Description</th><th>Operator</th><th>Type</th><th>MCCMNC</th><th>Roaming</th><th>Ported</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for val in result.values %}
+      <tr>
+        <td>{{ val.msisdn }}</td>
+        <td>{{ val.country }}</td>
+        <td>{{ val.status }}</td>
+        <td>{{ val.err_desc }}</td>
+        <td>{{ val.operator }}</td>
+        <td>{{ val.type }}</td>
+        <td>{{ val.mccmnc }}</td>
+        <td>{{ val.roaming }}</td>
+        <td>{{ val.ported }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}

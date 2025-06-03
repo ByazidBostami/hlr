@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Bulk HLR Lookup via CSV Upload</h1>
+<form method="post" enctype="multipart/form-data" class="mb-3">
+    {% csrf_token %}
+    {{ form.file.label_tag }}
+    {{ form.file }}
+    <button class="btn btn-primary mt-2" type="submit">Upload & Check</button>
+</form>
+
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if result %}
+    <h3>Results:</h3>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>MSISDN</th>
+                <th>Country</th>
+                <th>Status</th>
+                <th>Error Description</th>
+                <th>Operator</th>
+                <th>Type</th>
+                <th>MCCMNC</th>
+                <th>Roaming</th>
+                <th>Ported</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, val in result.items %}
+            <tr>
+                <td>{{ val.msisdn }}</td>
+                <td>{{ val.country }}</td>
+                <td>{{ val.status }}</td>
+                <td>{{ val.err_desc }}</td>
+                <td>{{ val.operator }}</td>
+                <td>{{ val.type }}</td>
+                <td>{{ val.mccmnc }}</td>
+                <td>{{ val.roaming }}</td>
+                <td>{{ val.ported }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}
